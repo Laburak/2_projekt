@@ -7,28 +7,32 @@ discord: Láďa#7333
 
 import random
 
+
 separator = '-'
 print(f"Hi there!."
       f"\n{separator * 47}"
       f"\nI've generated a random 4 digit number for you."
-      f"\nLet's play a bulls and cows game.")
+      f"\nLet's play a bulls and cows game."
+      f"\nYou can end the game by pressing the q key.")
 
 
 def secret_number():
-    """Selects a random four-digit number that does not contain 0 and does not repeat digits"""
+    """Selects a random four-digit number where 0 is not at the beginning and the digits are not repeated"""
 
-    number_s = []
+    number_s = list(str(random.randrange(1, 10, 1)))
+    number_s_2 = []
 
-    while len(number_s) < 4:
-        step = random.randrange(1, 10, 1)
-        if str(step) not in number_s:
-            number_s.append(str(step))
+    while len(number_s_2) < 3:
+
+        step = random.randrange(0, 10, 1)
+        if str(step) not in number_s_2 and str(step) not in number_s:
+            number_s_2.append(str(step))
         else:
             continue
+
+    number_s.extend(number_s_2)
+
     return number_s
-
-
-secret = secret_number()
 
 
 def good_choice():
@@ -36,13 +40,21 @@ def good_choice():
 
     print(separator * 30)
 
-    while (number := input('Enter the number: ')) != 'q':
-
+    while True:
+        number = input('Enter the number: ')
         print(separator * 30)
         sorted_number = (sorted(number))
 
-        if '0' in number:
-            print('No! No zeros!')
+        if number == 'q':
+            print(f'The number was: {"".join(secret)} \nTerminating the program...')
+
+            exit()
+
+        elif not number.isnumeric():
+            print('No! The entry must be numbers.')
+
+        elif '0' in number[0]:
+            print('The number cannot begin with zero!')
 
         elif len(str(number)) != 4 and number.isnumeric():
             print('No! The number must be 4 characters long.')
@@ -51,15 +63,9 @@ def good_choice():
                 sorted_number[2] == sorted_number[3]:
             print('No number twice!')
 
-        elif len(str(number)) == 4 and number.isnumeric():
+        else:
             return list(number)
 
-        else:
-            print('No! The entry must be numbers.')
-
-    else:
-        print('Terminating the program...')
-        exit()
 
 
 def bulls_cows(secret, number):
@@ -109,4 +115,5 @@ def play():
         exit()
 
 
+secret = secret_number()
 play()
